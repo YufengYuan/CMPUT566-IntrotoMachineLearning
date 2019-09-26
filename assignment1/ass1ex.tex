@@ -1,0 +1,468 @@
+\documentclass[11pt]{article}
+
+\newcommand{\semester}{Fall 2019}
+\usepackage{fancyhdr,multicol}
+\usepackage{amsmath,amssymb}
+
+%% Custom page layout.
+\setlength{\textheight}{\paperheight}
+\addtolength{\textheight}{-2in}
+\setlength{\topmargin}{-.5in}
+\setlength{\headsep}{.5in}
+\addtolength{\headsep}{-\headheight}
+\setlength{\footskip}{.5in}
+\setlength{\textwidth}{\paperwidth}
+\addtolength{\textwidth}{-2in}
+\setlength{\oddsidemargin}{0in}
+\setlength{\evensidemargin}{0in}
+\flushbottom
+
+\allowdisplaybreaks
+
+%% Custom headers and footers.
+\pagestyle{fancyplain}
+\let\headrule=\empty
+\let\footrule=\empty
+\lhead{\fancyplain{}{\semester}}
+\rhead{\fancyplain{}{CMPUT 466/566: Machine Learning}}
+\cfoot{{\thepage/\pageref{EndOfAssignment}}}
+
+%% Macros to generate question and part numbers automatically
+\newcounter{totalmarks}
+\setcounter{totalmarks}{0}
+\newcounter{questionnumber}
+\setcounter{questionnumber}{0}
+\newcounter{subquestionnumber}[questionnumber]
+\setcounter{subquestionnumber}{0}
+\renewcommand{\thesubquestionnumber}{(\alph{subquestionnumber})}
+\newcommand{\question}[2][]%
+  {\ifx\empty#2\empty\else
+   \addtocounter{totalmarks}{#2}\refstepcounter{questionnumber}\fi
+   \bigskip\noindent\textbf{\Large Question \thequestionnumber. } #1
+   {\scshape\ifx\empty#2\empty(continued)\else
+   [#2 mark\ifnum #2 > 1 s\fi]\fi}\par
+   \medskip\noindent\ignorespaces}
+\newcommand{\subquestion}[2][]%
+  {\ifx\empty#2\empty\else\refstepcounter{subquestionnumber}\fi
+   \medskip\noindent\textbf{\large \thesubquestionnumber } #1
+   {\scshape\ifx\empty#2\empty(continued)\else
+   [#2 mark\ifnum #2 > 1 s\fi]\fi}
+   \smallskip\noindent\ignorespaces}
+\newcommand{\bonus}[2][]%
+  {\bigskip\noindent\textbf{\Large Bonus. } #1
+   {\scshape\ifx\empty#2\empty(continued)\else
+   [#2 mark\ifnum #2 > 1 s\fi]\fi}\par
+   \medskip\noindent\ignorespaces}
+
+% Enable final count to be printed at top
+% \usepackage{totcount}
+% \regtotcounter{totalmarks}
+\begin{document}
+
+\thispagestyle{plain}
+
+\begin{center}
+\bfseries
+{\Large Homework Assignment \# 1}\\
+   Due: Thursday, September 26, 2019, 11:59 p.m. \\
+   Total marks: 100
+\end{center}
+
+
+
+\question{10}
+
+Let $X$ be a random variable with outcome space $\Omega=\{a,b,c\}$ and  $p(a)=0.1, p(b)=0.2$, and $p(c)=0.7$. Let 
+%
+\begin{align*}
+f(x)=
+\left\{
+  \begin{array}{lr}
+    10 &  \text{if } x = a\\
+    5 &  \text{if } x = b\\
+    10/7 & \text{if } x = c
+  \end{array}
+\right.
+\end{align*}
+
+\subquestion{3} 
+What is $E[f(X)]$?
+
+$$
+E[f(x)] = 10 * 0.1 + 5 * 0.2 + 10/7 * 7/10 = 3
+$$
+
+\subquestion{3} 
+What is $E[1/p(X)]$?
+
+$$
+E[1/p(x)] = 0.1 * 1/0.1 + 0.2*1/0.2 + 0.7*1/0.7=3
+$$
+
+\subquestion{4} 
+For an arbitrary pmf $p$, what is $E[1/p(X)]$?
+
+$$
+E[1/p(X)] = \sum_{x \in X}p(x) * 1/p(x) = 3
+$$
+
+% You can also define new variables to make it easier
+% and avoid long commands
+\newcommand{\muvec}{\boldsymbol{\mu}}
+\newcommand{\Xvec}{\mathbf{X}}
+
+\question{15}
+Let $\mathbf{X}_1, \ldots, \mathbf{X}_m$ be independent multivariate Gaussian random variables, with $\mathbf{X}_i \sim \mathcal{N}(\muvec_i, \boldsymbol{\Sigma}_i)$, with $\muvec_i \in \mathbb{R}^d$ and $\boldsymbol{\Sigma}_i \in \mathbb{R}^{d \times d}$ for dimension $d \in \mathbb{N}$. 
+Define $\mathbf{X} = a_1 \mathbf{X}_1 + a_2 \mathbf{X}_2 + \ldots + a_m \mathbf{X}_m$ as a convex combination, $a_i \ge 0$ and $\sum_{i=1}^m a_i = 1$. 
+
+\subquestion{5}
+Write the expected value $E[\mathbf{X}]$ in terms of the givens $a_i, \muvec_i, \boldsymbol{\Sigma}_i$. Show all you steps.
+What is the dimension of $E[\mathbf{X}]$?
+
+
+\begin{align*}
+E[\Xvec] &= E[a_1\Xvec_1 + a_2\Xvec_2 + \dots + a_m\Xvec_m] \\
+		 &= a_1E[\Xvec_1] + a_2E[\Xvec_2] + \dots + a_mE[\Xvec_m] \\
+		 &= \sum_{i=1}^{m} a_i * \muvec_i \in \mathbb{R}^d
+\end{align*}
+
+
+
+\subquestion{10}
+Write the covariance $\text{Cov}[\mathbf{X}]$ in terms of the givens $a_i, \muvec_i, \boldsymbol{\Sigma}_i$. Show all you steps.
+What is the dimension of $\text{Cov}[\mathbf{X}]$?
+Briefly explain how the result for
+$\text{Cov}[\mathbf{X}]$ would be different if the variables
+$\mathbf{X}_1$ and $\mathbf{X}_2$ are not independent and have covariance
+$\text{Cov}[\mathbf{X}_1,\mathbf{X}_2] = \boldsymbol{\Lambda}$ for $\boldsymbol{\Lambda} \in \mathbb{R}^{d \times d}$.
+
+By definition, we have:
+\begin{align*}
+\text{Cov}[X] &= E[(\Xvec - E[\Xvec])(\Xvec - E[\Xvec])^T] \\
+&= E[\Xvec \Xvec^T] - E[\Xvec]E[\Xvec]^T
+\end{align*}
+
+
+
+As the result is a $d\times d$ matrix, we use $i, j$ to denote the element in the $i$th row and the $j$th column. We use $\Xvec_{i,j}$ to denote the $j$th element in $\Xvec_{i}$ and $\Xvec_i$ to denote $i$th element in $\Xvec$:
+
+%The $i, j$ entry of matrix $E[\Xvec \Xvec^T]$:
+\begin{align*}
+	\text{Cov}[\Xvec]_{i,j} &=	E[\Xvec \Xvec^T]_{i,j} - E{[\Xvec]E[\Xvec]^T}_{i,j} \\
+ 	&= E[\Xvec_{i} \Xvec_{j}] - E[\Xvec_i]E[\Xvec_j]\\
+	&= E[\sum^{m}_{t=1}a_t \Xvec_{t,i}\sum^{m}_{t=1}a_t \Xvec_{t,j}] - E[\sum^{m}_{t=1}a_t \Xvec_{t,i}]E[\sum^{m}_{t=1}a_t \Xvec_{t,j}]
+\end{align*}
+
+\iffalse
+It's obvious that, when $i \neq j$, $E[\sum^{m}_{t=1}a_t \Xvec_{t,i}\sum^{m}_{t=1}a_t \Xvec_{t,j}] = E[\sum^{m}_{t=1}a_t \Xvec_{t,i}]E[\sum^{m}_{t=1}a_t \Xvec_{t,j}]$ due to the independence. In this case, any non-diagonal element in $\text{Cov}[\Xvec]$ is 0. For diagonal elements, we denote $\boldsymbol{\Sigma}_{i, m, n}$ as the element in the $m$th row and the $n$th column in $\boldsymbol{\Sigma}_i$ so we have:
+
+\begin{align*}
+\text{Cov}[X]_{i,i} &= E[\sum^{m}_{t=1}a_t \Xvec_{t,i}\sum^{m}_{t=1}a_t \Xvec_{t,i}] - E[\sum^{m}_{t=1}a_t \Xvec_{t,i}]E[\sum^{m}_{t=1}a_t \Xvec_{t,i}]\\
+&= \text{Var}(\sum^{m}_{t=1}a_t \Xvec_{t,i}) \\
+&= \sum^m_{t=1}a_t^2 \text{Var}(\Xvec_{t,i}) \\
+&= \sum^m_{t=1}a_t^2 \boldsymbol{\Sigma}_{t,i, i}
+\end{align*}
+\fi
+
+It's obvious that, for any $t \neq t'$, $E[a_{t}\Xvec_{t,i} a_{t'}\Xvec_{t', i}] = E[a_{t}\Xvec_{t,i}] E[a_{t'}\Xvec_{t', i}] $ due to the independence. In this case, the above formula can be simplified as:
+
+\begin{align*}
+	\text{Cov}[\Xvec]_{i,j} &= \sum_{t=1}^{m} a_t^2 E[\Xvec_{t,i} \Xvec_{t,j}] - \sum_{t=1}^{m} a_t^2 E[\Xvec_{t,i}] E[\Xvec_{t,j}] \\
+	&= \sum_{t=1}^{m} a_t^2 \big[E[\Xvec_{t,i} \Xvec_{t,j}] - E[\Xvec_{t,i}] E[\Xvec_{t,j}]\big] \\
+	&= \sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,i,j}
+\end{align*}
+
+
+ 
+The full matrix can be written as:
+ 
+\begin{align*}
+\text{Cov}(\Xvec) = \left[ \begin{array}{cccc}
+\sum^m_{t=1}a_t^2 \boldsymbol{\Sigma}_{t,1,1} & \sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,1,2} & \dots & \sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,1,d}\\
+\sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,2,1} & \sum^m_{t=1}a_t^2 \boldsymbol{\Sigma}_{t,2,2} & \dots & \sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,2,d}\\
+\vdots & \vdots & \ddots & \vdots\\
+\sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,d,1} & \sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,d,2} & \dots & \sum^m_{t=1}a_t^2 \boldsymbol{\Sigma}_{t,d,d}
+\end{array} \right]
+\in \mathbb{R}^{d\times d}
+\end{align*}
+
+In this case, the above simplication step would be different
+
+\begin{align*}
+\text{Cov}[\Xvec]_{i,j} &= \sum_{t=1}^{m} a_t^2 E[\Xvec_{t,i} \Xvec_{t,j}] - \sum_{t=1}^{m} a_t^2 E[\Xvec_{t,i}] E[\Xvec_{t,j}] \\
+& + a_1a_2E[\Xvec_{1,i}\Xvec_{2,j}]-a_1a_2E[\Xvec_{1,i}]E[\Xvec_{2,j}]
++ a_2a_1E[\Xvec_{2,i}\Xvec_{1,j}]-a_2a_1E[\Xvec_{2,i}]E[\Xvec_{1,j}]
+ \\
+&= \sum_{t=1}^{m} a_t^2 \big[E[\Xvec_{t,i} \Xvec_{t,j}] - E[\Xvec_{t,i}] E[\Xvec_{t,j}]\big] + 2a_1a_2\big[E[\Xvec_{1,i}\Xvec_{2,j}]-E[\Xvec_{1,i}]E[\Xvec_{2,j}]\big]
+\\
+&= \sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,i,j} +2a_1a_2\boldsymbol{\Lambda}_{i,j}
+\end{align*}
+
+Thus, the full matrix would be:
+
+\begin{align*}
+\text{Cov}(\Xvec) = \left[ \begin{array}{cccc}
+\sum^m_{t=1}a_t^2 \boldsymbol{\Sigma}_{t,1,1}+2a_1a_2\boldsymbol{\Lambda}_{1,1} & \sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,1,2}+2a_1a_2\boldsymbol{\Lambda}_{1,2} & \dots & \sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,1,d}+2a_1a_2\boldsymbol{\Lambda}_{1,d}\\
+\sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,2,1}+2a_1a_2\boldsymbol{\Lambda}_{2,1} & \sum^m_{t=1}a_t^2 \boldsymbol{\Sigma}_{t,2,2}+2a_1a_2\boldsymbol{\Lambda}_{2,2} & \dots & \sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,2,d}+2a_1a_2\boldsymbol{\Lambda}_{2,d}\\
+\vdots & \vdots & \ddots & \vdots\\
+\sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,d,1}+2a_1a_2\boldsymbol{\Lambda}_{d,1} & \sum_{t=1}^{m} a_t^2 \boldsymbol{\Sigma}_{t,d,2}+2a_1a_2\boldsymbol{\Lambda}_{d,2} & \dots & \sum^m_{t=1}a_t^2 \boldsymbol{\Sigma}_{t,d,d}+2a_1a_2\boldsymbol{\Lambda}_{d,d}
+\end{array} \right]
+%\in \mathbb{R}^{d\times d}
+\end{align*}
+\question{15}
+
+This question involves some simple simulations, to better visualize
+random variables and get some intuition for sampling,
+which is a central theme in machine learning. 
+Use the attached code called \verb+simulate.py+.
+This code is a simple script for sampling and plotting
+with python; play with some of the parameters to see what it is doing.
+Calling \verb+simulate.py+ runs with default parameters;
+\verb+simulate.py 1 100+ simulates 100 samples from a 1d Gaussian. 
+The generated plot is generically for 3 dimensions. If you call the function with 1d,
+then it simply plots the points on a line, but on a 3-dimensional plot. The maximum
+dimension that can be given to the script is 3.
+
+Note that if you do not have matplotlib installed, you will have to install it. 
+
+\subquestion{5}
+Run the code for 10, 100 and 1000 samples with dim=1 and $\sigma = 1.0$.
+Next run the code for 10, 100 and 1000 samples with dim=1 and $\sigma = 10.0$.
+What do you notice about the sample mean?
+\begin{table}[htb!]
+	\centering
+\begin{tabular}{|c|c|c|}
+	\hline
+	 & $\sigma$=1.0 & $\sigma$=10.0 \\
+	\hline
+	samples=10 & 0.272 & -6.109 \\
+	\hline
+	samples=100 & 0.114 & 1.484 \\
+	\hline
+	samples=1000 & 0.027 & 0.771 \\
+	\hline
+\end{tabular}
+\end{table}
+
+We can notice that as the sample number gets larger, the sample mean gets closer to the true mean. As the variance gets larger, the sample mean deviates more from the true mean. Such result is supported by theoretic result that the sample mean is an unbiased estimator of the true mean and the variance of sample mean is $\sigma^2/n$ where $n$ is the number of samples. 
+
+\subquestion{5}
+The current covariance for dim=3 is 
+%
+\begin{align*}
+\Sigma = \left[ \begin{array}{ccc}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1\end{array} \right]
+.
+\end{align*}
+%
+%
+What does that mean about the multivariate Gaussian (i.e., the vector random variable composed of random variables $X$, $Y$ and $Z$)?
+
+Each of the random variable has variance 1, but their covariance is 0, which means any two of the random variables are uncorrelated.
+
+\subquestion{5}
+Change the covariance to
+%
+\begin{align*}
+\Sigma = \left[ \begin{array}{ccc}
+1 & 0 & 1 \\
+0 & 1 & 0 \\
+1 & 0 & 1\end{array} \right]
+.
+\end{align*}
+%
+%
+What happens?
+
+In this case, random variable $X, Z$ are correlated. More specifically, they are now linearly associated to some degree.
+
+\question{30}
+
+Suppose that the number of accidents occurring daily in a certain plant has a 
+Poisson distribution with an unknown mean $\lambda$. 
+Based on previous experience in similar industrial plants, 
+suppose that our initial feelings about the possible value of $\lambda$ 
+can be expressed by an exponential distribution with parameter $\theta=\tfrac{1}{2}$. 
+That is, the prior density is
+%
+\begin{align*}
+p(\lambda)=\theta \textrm{e}^{-\theta\lambda}
+\end{align*}
+%
+%
+where $\lambda\in [0,\infty)$. 
+
+\subquestion{5} 
+Before observing any data (any reported accidents),
+what is the most likely value for $\lambda$?
+
+\begin{align*}
+	%p(\lambda) &= \frac{1}{2} e^{-\lambda/2} \\
+	   \lambda &= \arg\max_{\lambda} p(\lambda)\\
+		\lambda &= \arg\max_{\lambda} \frac{1}{2} e^{-\lambda/2}\\
+	   \lambda &= 0
+\end{align*}
+
+\subquestion{5} 
+Now imagine there are 79 accidents over 9 days. 
+Determine the maximum likelihood estimate of $\lambda$.
+
+Assume the data obtained is i.i.d and denote the dataset as $\mathcal{D}$ and each data point as $x_i$:
+$$
+p(\mathcal{D}|\lambda) = \prod_{i=1}^m\frac{\lambda^{x_i}e^{-\lambda}}{x_i!}
+$$
+
+The log-likelihood of $p$ can be written as:
+\begin{align*}
+	\ln p(\mathcal{D}|\lambda) &= \sum^m_{i=1}\ln\frac{\lambda^{x_i}e^{-\lambda}}{x_i!} \\
+	&= \sum^m_{i=1}x_i\ln\lambda - \lambda - \ln x_i! 
+\end{align*}
+
+$\lambda_{MLE} = \arg\max_{\lambda} \ln p(\mathcal{D} | \lambda) $ and the maximum of $\ln p(\mathcal{D} | \lambda) $ can be computed by taking derivatives w.r.t $\lambda$:
+$$
+\frac{d}{d\lambda}\ln p(\mathcal{D}|\lambda) = \frac{\sum^m_{i=1}x_i}{\lambda} - \sum^m_{i=1} 1
+$$
+
+As we already know $\sum^m_{i=1} x_i=79$ and $m=9$, $\lambda$ can be computed by setting the derivative as 0:
+\begin{align*}
+	\frac{\sum^m_{i=1}x_i}{\lambda} - \sum^m_{i=1} 1 = 0 \\
+	\rightarrow \lambda_{MLE} = 79 / 9
+\end{align*}
+
+\subquestion{5} 
+Again imagine there are 79 accidents over 9 days. 
+Determine the maximum a posteriori (MAP) estimate of  $\lambda$.
+
+Similar to the procedures in (b) with the same notation and assumption, the log-likelihood of $p$ can be written as:
+
+\begin{align*}
+	\ln p(\mathcal{D}|\lambda) p(\lambda) &= \ln p(\mathcal{D}|\lambda) + \ln p(\lambda) \\
+	&=\sum^m_{i=1}x_i\ln\lambda - \lambda - \ln x_i ! + \ln\theta - \theta\lambda \\
+\end{align*}
+
+$\lambda_{MAP} = \arg\max_\lambda \ln p(\mathcal{D}|\lambda) p(\lambda)$ and the maximum can be computed by taking partial derivatives w.r.t $\lambda$:
+$$
+\frac{\partial}{\partial\lambda}\ln p(\mathcal{D}|\lambda) p(\lambda) = 
+\frac{\sum^m_{i=1}x_i}{\lambda} - \sum^m_{i=1} 1 - \theta
+$$
+
+As we already know $\sum^m_{i=1} x_i=79$, $m=9$ and $\theta=1/2$, $\lambda$ can be computed by setting the derivative as 0:
+\begin{align*}
+	\frac{\sum^m_{i=1}x_i}{\lambda} - \sum^m_{i=1} 1 - \theta=0 \\
+	\rightarrow \lambda_{MAP}=158/19
+\end{align*}
+
+\subquestion{5}
+Imagine you now want to predict the number of accidents for tomorrow. 
+How can you use the maximum likelihood estimate computed above?
+What about the MAP estimate? What would they predict?
+
+I would use the mode of the distribution, which is the most likely value to predict. For Poisson distribution, the mode is the largest integer less than or equal to $\lambda$. Thus, the result predicted by MLE would be 8 and the result predicted by MAP would be 8 too.
+
+\subquestion{5}
+For the MAP estimate, what is the purpose of the prior once we observe this data?
+
+The purpose is to correct the variance and bias caused by limited number of observations and partial observability. For example, if we flip a coin and observe a head, from MLE, we will obtain the result that this coin is 100\% biased to head. However, we know this estimate is unlikely to be correct because a single data point has high variance. For MAP, with prior that the coin is totally unbiased, observing the previous event would only shift the estimate slightly toward that the coin is biased to head which is more reasonable. 
+
+\subquestion{5} 
+Imagine that now new safety measures have been put in place
+and you believe that the number of accidents per day should sharply
+decrease. How might you change $\theta$ to better reflect this new belief about the number of accidents?
+\emph{Hint:} Look at the plots of some exponential distributions to better understand the prior chosen on $\lambda$. 
+
+I would increase the value of $\theta$ because this would make small numbers even more likely for the prior distribution of $\lambda$.
+
+
+
+\question{30}
+
+Imagine that you would like to predict 
+if your favorite table will be free at your favorite restaurant. 
+The only additional piece of information you can collect, however, is if
+it is sunny or not sunny.
+%
+You collect paired samples from visit of the form (is sunny, is table free),
+where it is either sunny (1) or not sunny (0) 
+and the table is either free (1) or not free(0).
+
+\subquestion{10}
+How can this be formulated as a maximum likelihood problem?
+
+In this problem, we have two random variables, they are $X$=\{sunny, not sunny\} and $Y$=\{free, not free\}. Both the random variables are binary and discrete. The number of outcomes of the two random variable is 4, which can be well modeled by a multinomial distribution $f$. If we denote the parameter of a multinomial distribution as $p$, $p$ would have 4 components $p=\{p_1, p_2, p_3, p_4 |\sum^4_{i=1}p_i=1 \}$ and each represents the probability of data in each class.
+
+If we denote our dataset as $\mathcal{D} = \{(x_1, y_1), (x_2, y_2), \dots, (x_n, y_n) \}$, by the definition of maximum likelihood estimation, we can write:
+$$
+p_{MLE} = \arg\max_p f(\mathcal{D}|p)
+$$
+
+With the assumption that the data obtained is i.i.d, we can obtain:
+$$
+p_{MLE} = \arg\max_p \prod^n_{i=1} f((x_i, y_i)|p)
+$$
+
+By applying the log-likelihood trick, we can obtain:
+$$
+p_{MLE} = \arg\max_p \sum^n_{i=1} \ln f((x_i, y_i)|p)
+$$
+
+$p_{MLE}$ here can be solved by taking derivatives to find the maximum.
+
+
+\subquestion{10}
+Assume you have collected data for the last 10 days and computed the maximum likelihood solution to the problem formulated in (a). 
+If it is sunny today, how would you predict if your table will be free?
+
+In this case, we would have a joint distribution w.r.t the learned parameter $p_{MLE}$:
+$$
+P(X, Y|p_{MLE})
+$$
+where $X$=\{sunny, not sunny\} and $Y$=\{free, not free\}.
+
+To predict whether the table is free or not today, we need to compute the conditional distribution of $Y$ given $X$:
+$$
+P(Y | X; p_{MLE})
+$$
+
+By plugging in that $X$=sunny, we will know the probability of the table is free or not and we can pick the one with higher probability for prediction:
+$$
+P(Y | X\text{=sunny}; p_{MLE})
+$$
+
+
+\subquestion{10}
+Imagine now that you could further gather information about if it is morning, afternoon, or evening.
+How does this change the maximum likelihood problem?
+
+We denote $Z$ = \{morning, afternoon, evening\}. First, this will change our data in $\mathcal{D}$ from 2-dimensional to 3-dimensional. Second, the number of all outcomes of $X,Y,Z$ will be 12 and we need to model the distribution with a 12-dimensional multinomial distribution. Last, the joint distribution learned will be $P(X, Y, Z|p_{MLE})$ rather than $P(X, Y|p_{MLE})$
+
+\bonus{20}
+
+\subquestion{10}
+Using a computer, generate 1000 samples from a $d$-dimensional multivariate Gaussian with mean $\boldsymbol{0}$ and identity covariance matrix. Compute the average $\ell_2$ distance of each sample to the origin. Repeat this experiment for $d \in \{1, 2, 4, 8, 16, 32, 64, 128, 256\}$. 
+What happens to the average distance as $d$ increases? For $k$-means clustering, what is one implication of this outcome?
+
+
+\begin{table}[htb!]
+	\centering
+	\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+		\hline
+		Dimension & 1 & 2 & 4 & 8 & 16 & 32 & 64 & 128 & 256 \\
+		\hline
+		Distance &0.79 &1.26 &1.88&2.75&3.93&5.61&7.97&11.29&15.98 \\
+		\hline
+	\end{tabular}
+\end{table}
+
+From the table, we can conclude that the average distance increases as the dimension increases. This implies that for $k$-means clustering, $l_2$ distance may not be a good matric for high-dimensional data.
+
+\subquestion{10}
+Consider two $d$-dimensional hypercubes centered at the origin. The first has a side length of 1 and the second has a side length of 1 - $\epsilon$ ($ 0 < \epsilon < 1$). Give an expression for the ratio of the volume of the second hypercube to the volume of the first (in terms of $d$ and $\epsilon$). 
+What happens as $d$ gets large? How does this help explain the result about average distances from the previous question?
+
+The ratio of the two hypercubes is: $(1 - \epsilon)^d$. This implies even though $\epsilon$ can be close to 0, as the dimension $d$ approaches infinity, the ratio approaches 0. This implies for 2 data points, no matter how close they are, in high-dimensional space, they might be grouped into different clusters by $k$-means clustering. This again, explains the $k$-means clustering may not be suitable for high-dimensional data.
+
+\label{EndOfAssignment}%
+
+\end{document}
